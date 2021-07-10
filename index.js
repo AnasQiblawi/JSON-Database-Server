@@ -34,7 +34,8 @@ app.use('/database', express.static(dir))
 app.get('/', function(req, res) {
   console.log('wake up')
   res.json({
-    awake: true
+    awake:	true,
+	dbs:	fs.readdirSync(dir)
   })
 })
 
@@ -62,7 +63,7 @@ app.post('/database/:db_name/:method', function(req, res) {
 
   const db = new JSONdb(dir + '/' + db_name + '.json');
 
-  if (method == 'set' || method == 'add' || method == 'get' || method == 'has' || method == 'delete' || method == 'json') {
+  if (method == 'set' || method == 'get' || method == 'has' || method == 'delete' || method == 'json') {
 
     console.log('Good Method')
     res.status(200);
@@ -74,7 +75,7 @@ app.post('/database/:db_name/:method', function(req, res) {
       console.log('JSON')
       data = db.JSON()
 
-    } else if ((method == 'set' || method == 'add') && key && value) {
+    } else if (method == 'set' && key && value) {
       console.log('set')
       db.set(key, value)
       data = {
