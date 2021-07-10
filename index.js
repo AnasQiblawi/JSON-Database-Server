@@ -129,3 +129,87 @@ app.post('/database/:db_name/:method', function(req, res) {
   };
 
 })
+
+
+
+
+
+
+// DataBase Get ---------------------------------------------------------------------
+app.get('/database/:db_name/:method/:key', function(req, res) {
+  let db_name = req.params.db_name
+  let method = req.params.method.toLowerCase()
+  let key = req.params.key
+  //res.send(req.query)
+  let value	=	(req.query ? (req.query) : false)
+				
+  const db = new JSONdb(dir + '/' + db_name + '.json');
+	
+	  if (method == 'set' || method == 'get' || method == 'has' || method == 'delete') {
+
+    console.log('Good Method')
+    res.status(200);
+    let success = true;
+    let data;
+    let cause;
+
+    if (method == 'set' && key && value) {
+      console.log('set')
+      db.set(key, value)
+      data = {
+        [key]: db.get(key)
+      }
+    } else if (key) {
+      if (method == 'get') {
+        console.log('get')
+        data = db.get(key)
+
+      } else if (method == 'has') {
+        console.log('has')
+        data = db.has(key)
+
+      } else if (method == 'delete') {
+        console.log('delete')
+        data = db.delete(key)
+
+
+      } else {
+        console.log('Error 1')
+        res.status(400)
+        success = false
+        cause = 'key or value is not valid.'
+      }
+
+    } else {
+        console.log('Error 1')
+        res.status(400)
+        success = false
+        cause = 'key or value is not valid.'
+    }
+
+    res.json({
+      success: success,
+      method: method,
+      response: data || cause || ''
+    })
+
+  } else {
+    console.log('Error 2')
+    res.status(400)
+    let cause = "Method doesn't exist.";
+
+    res.json({
+      success: false,
+      method: method,
+      response: cause
+    })
+
+  };
+
+})
+
+
+
+
+
+
