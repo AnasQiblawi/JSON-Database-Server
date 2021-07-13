@@ -15,7 +15,7 @@ GET  localhost/database/<db name>
 ## Get all
 ```js
 GET  localhost/database/<db name>/json
-GET   localhost/database/<db name>.json
+GET  localhost/database/<db name>.json
 ```
 ```js
 POST  localhost/database/<db name>/json
